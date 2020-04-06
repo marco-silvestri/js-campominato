@@ -36,6 +36,7 @@ populateRandomly(1,victoryCap,forbiddenNumbers,16);
 
 console.table(forbiddenNumbers.sort());
 console.log(victoryCap);
+console.log(victoryCap - forbiddenNumbers.length);
 //Main logic
 while (inGame) {
   userNumber = sanitizedNumericalInput('Insert a number',0,victoryCap);
@@ -47,16 +48,15 @@ while (inGame) {
   else if (fieldNumbers.includes(userNumber)) {
     console.log('Please, enter a number you\'ve never used.');
   }
-  else if (fieldNumbers.length == (victoryCap - forbiddenNumbers.length)) {
-    score++;
+  else if (score >= (victoryCap - forbiddenNumbers.length)-1) {
     console.log('You\'ve achieved a total victory!');
     console.log('SCORE:', score);
     inGame = false;
   }
   else {
     fieldNumbers.push(userNumber);
-    console.log('For this time you are safe!');
-    score++;
+    ++score;
+    console.log('For this time you are safe!\nCurrent Score: ' + score);
   }
 }
 
