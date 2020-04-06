@@ -12,17 +12,33 @@
 * Hard difficulty 2: Random numbers 1-50;
 *
 ***********************************************************************************************************************************/
-
+var difficultySet = sanitizedNumericalInput('Pick your difficulty:\n(0)Easy\n(1)Medium\n(2)Hard',0,3);
+var victoryCap;
 var forbiddenNumbers = [];
-populateRandomly(1,100,forbiddenNumbers,16);
 var fieldNumbers = [];
 var userNumber;
 var inGame = true;
 var score = 0;
 
+switch (difficultySet) {
+  case 0:
+    victoryCap = 100;
+    break;
+  case 1:
+    victoryCap = 80;
+    break;
+  case 2:
+    victoryCap = 50;
+    break;
+}
+
+populateRandomly(1,victoryCap,forbiddenNumbers,16);
+
+console.table(forbiddenNumbers.sort());
+console.log(victoryCap);
 //Main logic
 while (inGame) {
-  userNumber = parseInt(prompt('Number please'));
+  userNumber = sanitizedNumericalInput('Insert a number',0,victoryCap);
   if (forbiddenNumbers.includes(userNumber)) {
     console.log('Sorry boo, you lost!');
     console.log('SCORE: ', score);
@@ -30,6 +46,12 @@ while (inGame) {
   }
   else if (fieldNumbers.includes(userNumber)) {
     console.log('Please, enter a number you\'ve never used.');
+  }
+  else if (fieldNumbers.length == (victoryCap - forbiddenNumbers.length)) {
+    score++;
+    console.log('You\'ve achieved a total victory!');
+    console.log('SCORE:', score);
+    inGame = false;
   }
   else {
     fieldNumbers.push(userNumber);
@@ -39,20 +61,29 @@ while (inGame) {
 }
 
 // Output
-console.table(forbiddenNumbers);
 
 // Geneates a random number in a range min, max (inclusive)
 function randomGenie(min, max){
   var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-
   return randomNumber;
 }
 
 // Populate an arrayToPopulate with a unique population of random numbers generated in a min max range
 function populateRandomly(min,max,arrayToPopulate,population) {
-  var randomNumber = 0;
+  var randomNumber;
   do {
     randomNumber = randomGenie(min,max);
-    arrayToPopulate.push(randomNumber);
-  } while (!arrayToPopulate.includes(randomNumber) || arrayToPopulate.length < population);
+    if (!arrayToPopulate.includes(randomNumber)) {
+      arrayToPopulate.push(randomNumber);
+    }
+  } while (arrayToPopulate.length < population);
+}
+
+//Force a non-empty numberical input in range between min max of a prompted input
+function sanitizedNumericalInput(question,min,max) {
+   do {
+     usersInputRaw = parseInt(prompt(question).trim());
+   } while (usersInputRaw == null || isNaN(usersInputRaw) || usersInputRaw <= min || usersInputRaw >= max );
+
+   return usersInputRaw;
 }
