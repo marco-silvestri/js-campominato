@@ -12,7 +12,7 @@
 * Hard difficulty 2: Random numbers 1-50;
 *
 ***********************************************************************************************************************************/
-var difficultySet = sanitizedNumericalInput('Pick your difficulty:\n(0)Easy\n(1)Medium\n(2)Hard',0,3);
+var difficultySet = sanitizedNumericalInput('Pick your difficulty:\n(0)Easy\n(1)Medium\n(2)Hard',0,2);
 var victoryCap;
 var forbiddenNumbers = [];
 var fieldNumbers = [];
@@ -34,9 +34,6 @@ switch (difficultySet) {
 
 populateRandomly(1,victoryCap,forbiddenNumbers,16);
 
-console.table(forbiddenNumbers.sort());
-console.log(victoryCap);
-console.log(victoryCap - forbiddenNumbers.length);
 //Main logic
 while (inGame) {
   userNumber = sanitizedNumericalInput('Insert a number',0,victoryCap);
@@ -60,8 +57,6 @@ while (inGame) {
   }
 }
 
-// Output
-
 // Geneates a random number in a range min, max (inclusive)
 function randomGenie(min, max){
   var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -83,7 +78,7 @@ function populateRandomly(min,max,arrayToPopulate,population) {
 function sanitizedNumericalInput(question,min,max) {
    do {
      usersInputRaw = parseInt(prompt(question).trim());
-   } while (usersInputRaw == null || isNaN(usersInputRaw) || usersInputRaw <= min || usersInputRaw >= max );
+   } while (usersInputRaw == null || isNaN(usersInputRaw) || usersInputRaw < min || usersInputRaw > max );
 
    return usersInputRaw;
 }
